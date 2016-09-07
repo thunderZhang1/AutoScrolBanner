@@ -58,8 +58,8 @@ dependencies {
 
 ## Todo
 
- ~~支持viewpager切换动画配置~~ <br>
- 支持indicator切换动画配置
+ 支持viewpager切换动画配置 <br>
+ 支持indicator切换动画配置 <br>
  优化
 
 ## License
