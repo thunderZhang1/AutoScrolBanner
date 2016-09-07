@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--圆形指示器相关属性-->
+    <declare-styleable name="PagerIndicator">
+        <!--指示器宽度-->
+        <attr name="indicator_width" format="dimension"></attr>
+        <!--指示器高度-->
+        <attr name="indicator_height" format="dimension"></attr>
+        <!--指示器圆点之间间隔-->
+        <attr name="indicator_margin" format="dimension"></attr>
+        <!--选中-->
+        <attr name="select_drawable" format="reference"></attr>
+        <!--未选中-->
+        <attr name="select_drawable_unselect" format="reference"></attr>
+        <!--指示器类型-->
+        <attr name="indicator_type" format="enum">
+            <enum name="circle" value="0"/><!--数字指示器-->
+            <enum name="number" value="1"/><!--圆点指示器-->
+        </attr>
+        <!--字体大小-->
+        <attr name="indicator_font_size" format="dimension"></attr>
+        <!--字体颜色-->
+        <attr name="indicator_font_color" format="color"></attr>
+    </declare-styleable>
+
+</resources>

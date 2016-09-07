@@ -1,5 +1,7 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.novoda.bintray-release'//添加
+// 这里添加下面两行代码。
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
 android {
     compileSdkVersion 23
     buildToolsVersion "24.0.1"
@@ -16,14 +18,81 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    //添加
-    publish {
-        userOrg = 'zhangjingjing'//bintray.com用户名
-        groupId = 'com.zhangjingjing'//jcenter上的路径
-        artifactId = 'autoscrollbanner'//项目名称
-        publishVersion = '1.0.0'//版本号
-        desc = 'a library of viewpager used for banner'//
-        website = 'https://github.com/thunderZhang1/AutoScrolBanner.git'//网站，不重要；尽量模拟github上的地址，例如我这样的；当然你有地址最好了
+}
+
+version = "1.0.0"
+
+// 定义两个链接，下面会用到。
+def siteUrl = 'https://github.com/thunderZhang1/AutoScrolBanner' // 项目主页。
+def gitUrl = 'git@github.com:thunderZhang1/AutoScrolBanner.git' // Git仓库的url。
+
+// 唯一包名，比如compile 'com.yanzhenjie:andserver:1.0.1'中的com.yanzhenjie就是这里配置的。
+group = "com.zhangjingjing"
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging 'aar'
+                name '可循环滚动banner库'// 可选，项目名称。
+                description 'a library of viewpager used for banner'// 可选，项目描述。
+                url siteUrl // 项目主页，这里是引用上面定义好。
+
+                // 软件开源协议，现在一般都是Apache License2.0吧，复制我的，这里不需要修改。
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                //填写开发者基本信息，复制我的，这里需要修改。
+                developers {
+                    developer {
+                        id 'zhangjingjing' // 开发者的id。
+                        name 'zhangjingjing' // 开发者名字。
+                        email '13663797524@163.com' // 开发者邮箱。
+                    }
+                }
+
+                // SCM，复制我的，这里不需要修改。
+                scm {
+                    connection gitUrl // Git仓库地址。
+                    developerConnection gitUrl // Git仓库地址。
+                    url siteUrl // 项目主页。
+                }
+            }
+        }
+    }
+}
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+    configurations = ['archives']
+    pkg {
+        name = "autoscrolbanner"
+        repo = "maven"
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = ["Apache-2.0"]
+        publish = true
     }
 }
 
