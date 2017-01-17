@@ -24,13 +24,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mAutoVp = (CycleViewpager) findViewById(R.id.vp_auto);
-        mIndicator = (PagerIndicator) findViewById(R.id.pi_indicator);
         imgUrls = new ArrayList<>();
         imgUrls.add("http://img1.imgtn.bdimg.com/it/u=3769085312,4099151823&fm=11&gp=0.jpg");
         imgUrls.add("http://pic84.huitu.com/res/20160811/872881_20160811165054507200_1.jpg");
         imgUrls.add("http://pic84.huitu.com/res/20160819/519224_20160819161432929319_1.jpg");
-        final MyPagerAdapter adapter = new MyPagerAdapter(this, imgUrls);
+        mAutoVp = (CycleViewpager) findViewById(R.id.vp_auto);
+        mIndicator = (PagerIndicator) findViewById(R.id.pi_indicator);
+        MyPagerAdapter adapter = new MyPagerAdapter(this, imgUrls);
         mAutoVp.setAdapter(adapter);
         mAutoVp.startAutoScroll();
         mIndicator.setViewpager(mAutoVp);

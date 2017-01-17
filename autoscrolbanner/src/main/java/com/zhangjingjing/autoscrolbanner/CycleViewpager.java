@@ -20,8 +20,9 @@ public class CycleViewpager extends ViewPager{
     private ArrayList<OnPageChangeListener> mPageChangeListeners;
 
     private final int AUTO_SCROLL = 0x01;
-    private boolean                stopScrollWhenTouch         = true;
-    public static final int        DEFAULT_INTERVAL            = 3000;
+    private boolean                stopScrollWhenTouch       = true;  //
+    private static final int DEFAULT_DELAY = 3000;
+    public int  DEFAULT_INTERVAL = DEFAULT_DELAY;  //自动滚动延迟时间
     private Handler mHandler = new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage(Message msg) {
@@ -71,9 +72,14 @@ public class CycleViewpager extends ViewPager{
         super.addOnPageChangeListener(mPageChangeListener);
     }
 
-    public void startAutoScroll() {
-        mHandler.sendEmptyMessageDelayed(AUTO_SCROLL,DEFAULT_INTERVAL);
+    /**
+     * 设置滚动延迟
+     * @param delaymillis
+     */
+    public void setScrollDelay(int delaymillis){
+        DEFAULT_INTERVAL = delaymillis;
     }
+
     private int prePagerIndex = -1;//记录上一次viewpager的页码
     private float mPreviousOffset = -1; //记录上一页的左边偏移百分比
     /**
@@ -172,12 +178,25 @@ public class CycleViewpager extends ViewPager{
         super.setAdapter(mAdapter);
         setCurrentItem(0, false);
     }
-
+    @Override
+    public PagerAdapter getAdapter() {
+        return mAdapter != null ? mAdapter.getRealAdapter() : mAdapter;
+    }
+    /**
+     * 提供收到设置当前页方法
+     * @param item
+     * @param smoothScroll 是否使用动画
+     */
     public void setCurrentItem(int item, boolean smoothScroll) {
         int realItem = mAdapter.toInnerPosition(item);
         super.setCurrentItem(realItem, smoothScroll);
     }
 
+    /**
+     * 提供收到设置当前页方法
+     * @param item
+     * 默认使用动画
+     */
     @Override
     public void setCurrentItem(int item) {
         if (getCurrentItem() != item) {
@@ -185,11 +204,30 @@ public class CycleViewpager extends ViewPager{
         }
     }
 
+    /**
+     * 获取当前页码
+     * @return
+     */
+    @Override
+    public int getCurrentItem() {
+        return mAdapter != null ? mAdapter.toRealPosition(super.getCurrentItem()) : 0;
+    }
+    /**
+     * 开启自动循环滚动
+     */
+    public void startAutoScroll() {
+        mHandler.sendEmptyMessageDelayed(AUTO_SCROLL,DEFAULT_INTERVAL);
+    }
+
+    /**
+     * 滚动方法
+     */
     public void scrollOnce() {
         if(mAdapter.getRealCount()>0){
-            int position = getCurrentItem() ;
+            int position = getCurrentItem()+1 ;
             setCurrentItem(position,true);
         }
     }
+
 
 }

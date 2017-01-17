@@ -95,5 +95,9 @@ public class CyclePagerAdapterWrapper extends PagerAdapter{
         int position = (realPosition + 1);
         return mBoundaryLooping ? position : realPosition;
     }
+
+    public PagerAdapter getRealAdapter() {
+        return outAdapter;
+    }
 }
 
